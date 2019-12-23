@@ -91,5 +91,5 @@ services:
     #######################################################
     # Add TLS server certificate and key
     #######################################################
-      #- ./server.crt:/usr/local/apache2/conf/server.crt
-      #- ./server.key:/usr/local/apache2/conf/server.key
+      - ./server.crt:/usr/local/apache2/conf/server.crt
+      - ./server.key:/usr/local/apache2/conf/server.key
