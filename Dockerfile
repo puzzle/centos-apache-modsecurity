@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG BRANCH=v3.2/dev
+ARG BRANCH=tags/v3.2.0
 ARG REPO=SpiderLabs/owasp-modsecurity-crs
 ENV PARANOIA=2 \
     PORT=8443 \
@@ -39,10 +39,12 @@ ENV PARANOIA=2 \
     MODSEC_RESTRICTED_HEADERS='/proxy/ /lock-token/ /content-range/ /translate/ /if/' \
     MODSEC_STATIC_EXTENSIONS='/.jpg/ /.jpeg/ /.png/ /.gif/ /.js/ /.css/ /.ico/ /.svg/ /.webp/' \
     MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET='utf-8|iso-8859-1|iso-8859-15|windows-1252' \
-    MODSEC_ARG_NAME_LENGTH=256 \
     MODSEC_MAX_NUM_ARGS=300 \
+    MODSEC_ARG_NAME_LENGTH=255 \
+    MODSEC_ARG_LENGTH=400 \
+    MODSEC_TOTAL_ARG_LENGTH=64000 \
     MODSEC_MAX_FILE_SIZE=100000000 \
-    MODSEC_MAX_COMBINED_SIZE=100000000 \
+    MODSEC_COMBINED_FILE_SIZE=100000000 \
     PROXY_TIMEOUT=30
 
 #FIXME: kein git

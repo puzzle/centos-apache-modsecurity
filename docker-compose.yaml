@@ -1,0 +1,95 @@
+version: "3"
+
+services:
+
+  crs:
+    image: quay.io/puzzle/centos-apache-modsecurity:v3.2.0
+    ports:
+      - "8443:8443"
+
+    environment:
+      - SERVER_NAME=localhost
+      - PORT=8443
+
+      #############################################
+      # Basic ModSecurity / CRS Settings
+      #############################################
+      #- SECRULEENGINE=Off
+      # 
+      # Paranoia Level
+      - PARANOIA=2
+      # Inbound and Outbound Anomaly Score Threshold
+      - ANOMALY_INBOUND=5
+      - ANOMALY_OUTBOUND=4
+      # Executing Paranoia Level
+      #- EXECUTING_PARANOIA=2
+
+      #############################################
+      # Apache Settings
+      #############################################
+      #- APACHE_TIMEOUT=10
+      #- APACHE_MAX_REQUEST_WORKERS=100
+      #- APACHE_LOGLEVEL=notice
+      #- APACHE_ERRORLOG=/dev/stdout
+      #- APACHE_ACCESSLOG=/dev/stdout extended
+      #- APACHE_PERFLOG=/var/log/httpd/modsec-perf.log perflog env=write_perflog
+      #- PROXY_TIMEOUT=30
+
+      #######################################################
+      # Reverse Proxy mode
+      #######################################################
+      # BACKEND: Application Backend of Reverse Proxy
+      #- BACKEND=http://app:8000
+
+      #######################################################
+      # Various ModSecurity Variables
+      #######################################################
+      #- REQ_BODY_ACCESS=On
+      #- REQ_BODY_LIMIT=10000000
+      #- REQ_BODY_NOFILES_LIMIT=64000
+      #- RESP_BODY_ACCESS=On
+      #- RESP_BODY_LIMIT=10000000
+      #- PCRE_MATCH_LIMIT=100000
+      #- PCRE_MATCH_LIMIT_RECURSION=100000
+      #- MODSEC_DEBUG_LOG=/var/log/modsecurity/modsec_debug.log
+      #- MODSEC_DEBUG_LOGLEVEL=0
+      #- MODSEC_AUDIT_LOG=/var/log/modsecurity/audit.log
+      #- MODSEC_AUDIT_STORAGE=/var/log/modsecurity/audit/
+      #- MODSEC_DATA_DIR=/tmp/
+      #- MODSEC_TMP_DIR=/tmp/
+      #- MODSEC_UPLOAD_DIR=/tmp/
+
+      #######################################################
+      # Various CRS Variables with Default Values
+      #######################################################
+      #- MODSEC_ENFORCE_BODYPROC_URLENCODED=1
+      #- MODSEC_ALLOWED_METHODS=GET HEAD POST OPTIONS
+      #- MODSEC_ALLOWED_REQUEST_CONTENT_TYPE=application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|text/plain
+      #- MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET=utf-8|iso-8859-1|iso-8859-15|windows-1252
+      #- MODSEC_ALLOWED_HTTP_VERSIONS=HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0
+      #- MODSEC_RESTRICTED_EXTENSIONS=.asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/
+      #- MODSEC_RESTRICTED_HEADERS=/proxy/ /lock-token/ /content-range/ /translate/ /if/
+      #- MODSEC_STATIC_EXTENSIONS=/.jpg/ /.jpeg/ /.png/ /.gif/ /.js/ /.css/ /.ico/ /.svg/ /.webp/
+
+      #######################################################
+      # CRS Variables with Default Value unlimited
+      #######################################################
+      #- MODSEC_MAX_NUM_ARGS=300
+      #- MODSEC_ARG_NAME_LENGTH=255
+      #- MODSEC_ARG_LENGTH=400
+      #- MODSEC_TOTAL_ARG_LENGTH=64000
+      #- MODSEC_MAX_FILE_SIZE=100000000
+      #- MODSEC_COMBINED_FILE_SIZES=100000000
+
+    #######################################################
+    # Volumes for ModSecurity Tuning
+    #######################################################
+    volumes:
+      #- ./rules-before-crs.conf:/etc/httpd/modsecurity/service/custom-before-crs/rules.conf
+      #- ./rules-after-crs.conf:/etc/httpd/modsecurity/service/custom-after-crs/rules.conf
+
+    #######################################################
+    # Add TLS server certificate and key
+    #######################################################
+      #- ./server.crt:/usr/local/apache2/conf/server.crt
+      #- ./server.key:/usr/local/apache2/conf/server.key
