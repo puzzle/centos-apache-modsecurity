@@ -3,7 +3,8 @@ version: "3"
 services:
 
   crs:
-    image: quay.io/puzzle/centos-apache-modsecurity:v3.2.0
+    image: quay.io/puzzle/centos-apache-modsecurity:latest
+    #image: quay.io/puzzle/centos-apache-modsecurity:v3.2.0
     ports:
       - "8443:8443"
 
