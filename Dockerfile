@@ -2,9 +2,9 @@ FROM centos:7
 
 ARG BRANCH=tags/v3.2.0
 ARG REPO=SpiderLabs/owasp-modsecurity-crs
-ENV PARANOIA=2 \
+ENV PARANOIA=1 \
     PORT=8443 \
-    EXECUTING_PARANOIA=2 \
+    EXECUTING_PARANOIA=1 \
     ANOMALY_INBOUND=5 \
     ANOMALY_OUTBOUND=4 \
     SERVER_NAME=localhost \
