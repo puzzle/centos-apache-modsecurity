@@ -18,7 +18,7 @@ services:
       #- SECRULEENGINE=Off
       # 
       # Paranoia Level
-      - PARANOIA=2
+      - PARANOIA=1
       # Inbound and Outbound Anomaly Score Threshold
       - ANOMALY_INBOUND=5
       - ANOMALY_OUTBOUND=4
@@ -92,5 +92,5 @@ services:
     #######################################################
     # Add TLS server certificate and key
     #######################################################
-      - ./server.crt:/usr/local/apache2/conf/server.crt
-      - ./server.key:/usr/local/apache2/conf/server.key
+      - ./server.crt:/etc/ssl/certs/ssl-cert.pem
+      - ./server.key:/etc/ssl/private/ssl-cert.key
