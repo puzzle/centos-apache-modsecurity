@@ -26,26 +26,29 @@ ENV PARANOIA=1 \
     MODSEC_DEBUG_LOG=/var/log/modsecurity/modsec_debug.log \
     MODSEC_DEBUG_LOGLEVEL=0 \
     MODSEC_AUDIT_LOG=/var/log/modsecurity/audit.log \
+    MODSEC_AUDIT_LOGPARTS=ABEFHIJKZ \
+    MODSEC_AUDIT_LOGTYPE=concurrent \
+    MODSEC_AUDIT_LOGFORMAT=JSON \
     MODSEC_AUDIT_STORAGE=/var/log/modsecurity/audit/ \
     MODSEC_DATA_DIR=/tmp/ \
     MODSEC_TMP_DIR=/tmp/ \
     MODSEC_UPLOAD_DIR=/tmp/ \
     MODSEC_ENFORCE_BODYPROC_URLENCODED=1 \
     MODSEC_ALLOWED_METHODS='GET HEAD POST OPTIONS' \
-    MODSEC_ALLOWED_CONTENT='application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/x-amf|application/json' \
     MODSEC_ALLOWED_REQUEST_CONTENT_TYPE='application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|application/csp-report|application/xss-auditor-report|text/plain' \
     MODSEC_ALLOWED_HTTP_VERSIONS='HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0' \
     MODSEC_RESTRICTED_EXTENSIONS='.asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/' \
     MODSEC_RESTRICTED_HEADERS='/proxy/ /lock-token/ /content-range/ /translate/ /if/' \
     MODSEC_STATIC_EXTENSIONS='/.jpg/ /.jpeg/ /.png/ /.gif/ /.js/ /.css/ /.ico/ /.svg/ /.webp/' \
     MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET='utf-8|iso-8859-1|iso-8859-15|windows-1252' \
+    MODSEC_ARG_NAME_LENGTH=256 \
     MODSEC_MAX_NUM_ARGS=300 \
-    MODSEC_ARG_NAME_LENGTH=255 \
     MODSEC_ARG_LENGTH=400 \
     MODSEC_TOTAL_ARG_LENGTH=64000 \
     MODSEC_MAX_FILE_SIZE=100000000 \
-    MODSEC_COMBINED_FILE_SIZE=100000000 \
+    MODSEC_COMBINED_FILE_SIZES=100000000 \
     PROXY_TIMEOUT=30
+# MODSEC_AUDIT_LOGFORMAT is currently not supported
 
 #FIXME: kein git
 RUN yum install -y httpd mod_security mod_ssl wget curl git && \

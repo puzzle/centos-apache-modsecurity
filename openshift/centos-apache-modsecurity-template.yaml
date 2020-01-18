@@ -1,0 +1,425 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: waf-template
+  annotations:
+    description: "Description"
+    iconClass: "icon-apache"
+    tags: "waf,modsecurity"
+objects:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      labels:
+        app: centos-apache-modsecurity
+      name: centos-apache-modsecurity
+    spec:
+      lookupPolicy:
+        local: true
+      tags:
+      - from:
+          kind: DockerImage
+          name: quay.io/puzzleitc/centos-apache-modsecurity
+        importPolicy: {}
+        name: latest
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      labels:
+        app: centos-apache-modsecurity
+      name: centos-apache-modsecurity
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        app: centos-apache-modsecurity
+        deploymentconfig: centos-apache-modsecurity
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: centos-apache-modsecurity
+            deploymentconfig: centos-apache-modsecurity
+        spec:
+          containers:
+            - env:
+                - name: BACKEND
+                  value: ${BACKEND}
+                - name: SERVER_NAME
+                  value: ${SERVER_NAME}
+                - name: PORT
+                  value: ${PORT}
+                - name: SECRULEENGINE
+                  value: ${SECRULEENGINE}
+                - name: PARANOIA
+                  value: ${PARANOIA}
+                - name: EXECUTING_PARANOIA
+                  value: ${EXECUTING_PARANOIA}
+                - name: ANOMALY_INBOUND
+                  value: ${ANOMALY_INBOUND}
+                - name: ANOMALY_OUTBOUND
+                  value: ${ANOMALY_OUTBOUND}                  
+                - name: APACHE_TIMEOUT
+                  value: ${APACHE_TIMEOUT}
+                - name: PROXY_TIMEOUT
+                  value: ${PROXY_TIMEOUT}
+                - name: APACHE_MAX_REQUEST_WORKERS
+                  value: ${APACHE_MAX_REQUEST_WORKERS}
+                - name: APACHE_LOGLEVEL
+                  value: ${APACHE_LOGLEVEL}
+                - name: APACHE_ERRORLOG
+                  value: ${APACHE_ERRORLOG}
+                - name: APACHE_ACCESSLOG
+                  value: ${APACHE_ACCESSLOG}
+                - name: APACHE_PERFLOG
+                  value: ${APACHE_PERFLOG}
+                - name: REQ_BODY_ACCESS
+                  value: ${REQ_BODY_ACCESS}
+                - name: REQ_BODY_LIMIT
+                  value: ${REQ_BODY_LIMIT}
+                - name: REQ_BODY_NOFILES_LIMIT
+                  value: ${REQ_BODY_NOFILES_LIMIT}
+                - name: RESP_BODY_ACCESS
+                  value: ${RESP_BODY_ACCESS}
+                - name: RESP_BODY_LIMIT
+                  value: ${RESP_BODY_LIMIT}
+                - name: PCRE_MATCH_LIMIT
+                  value: ${PCRE_MATCH_LIMIT}
+                - name: PCRE_MATCH_LIMIT_RECURSION
+                  value: ${PCRE_MATCH_LIMIT_RECURSION}
+                - name: MODSEC_DEBUG_LOG
+                  value: ${MODSEC_DEBUG_LOG}
+                - name: MODSEC_DEBUG_LOGLEVEL
+                  value: ${MODSEC_DEBUG_LOGLEVEL}
+                - name: MODSEC_AUDIT_LOG
+                  value: ${MODSEC_AUDIT_LOG}
+                - name: MODSEC_AUDIT_LOGPARTS
+                  value: ${MODSEC_AUDIT_LOGPARTS}
+                - name: MODSEC_AUDIT_LOGTYPE
+                  value: ${MODSEC_AUDIT_LOGTYPE}
+                - name: MODSEC_AUDIT_LOGFORMAT
+                  value: ${MODSEC_AUDIT_LOGFORMAT}
+                - name: MODSEC_AUDIT_STORAGE
+                  value: ${MODSEC_AUDIT_STORAGE}
+                - name: MODSEC_DATA_DIR
+                  value: ${MODSEC_DATA_DIR}
+                - name: MODSEC_TMP_DIR
+                  value: ${MODSEC_TMP_DIR}
+                - name: MODSEC_UPLOAD_DIR
+                  value: ${MODSEC_UPLOAD_DIR}
+                - name: MODSEC_ENFORCE_BODYPROC_URLENCODED
+                  value: ${MODSEC_ENFORCE_BODYPROC_URLENCODED}
+                - name: MODSEC_ALLOWED_METHODS
+                  value: ${MODSEC_ALLOWED_METHODS}
+                - name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE
+                  value: ${MODSEC_ALLOWED_REQUEST_CONTENT_TYPE}
+                - name: MODSEC_ALLOWED_HTTP_VERSIONS
+                  value: ${MODSEC_ALLOWED_HTTP_VERSIONS}
+                - name: MODSEC_RESTRICTED_EXTENSIONS
+                  value: ${MODSEC_RESTRICTED_EXTENSIONS}
+                - name: MODSEC_RESTRICTED_HEADERS
+                  value: ${MODSEC_RESTRICTED_HEADERS}
+                - name: MODSEC_STATIC_EXTENSIONS
+                  value: ${MODSEC_STATIC_EXTENSIONS}
+                - name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET
+                  value: ${MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET}
+                - name: MODSEC_MAX_NUM_ARGS
+                  value: ${MODSEC_MAX_NUM_ARGS}
+                - name: MODSEC_ARG_NAME_LENGTH
+                  value: ${MODSEC_ARG_NAME_LENGTH}
+                - name: MODSEC_ARG_LENGTH
+                  value: ${MODSEC_ARG_LENGTH}
+                - name: MODSEC_TOTAL_ARG_LENGTH
+                  value: ${MODSEC_TOTAL_ARG_LENGTH}
+                - name: MODSEC_MAX_FILE_SIZE
+                  value: ${MODSEC_MAX_FILE_SIZE}
+                - name: MODSEC_COMBINED_FILE_SIZE
+                  value: ${MODSEC_COMBINED_FILE_SIZE}
+              image: 'quay.io/puzzle/centos-apache-modsecurity:latest'
+              imagePullPolicy: Always
+              name: centos-apache-modsecurity
+              ports:
+                - containerPort: ${{PORT}}
+                  protocol: TCP
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                #- mountPath: /tmp/tls.crt
+                #  name: volmount-tls-cert
+                #  subPath: tls.crt
+                #- mountPath: /tmp/tls.key
+                #  name: volmount-tls-key
+                #  subPath: tls.key
+                - mountPath: /etc/httpd/modsecurity/service/custom-after-crs/rules.conf
+                  name: custom-rules
+                  subPath: custom-after-crs-rules.conf
+                - mountPath: /etc/httpd/modsecurity/service/custom-before-crs/rules.conf
+                  name: custom-rules
+                  subPath: custom-before-crs-rules.conf
+                - mountPath: /etc/ssl/certs/
+                  name: volmount-tls
+                  readOnly: true
+          volumes:
+            #- name: volmount-tls-cert
+            #  secret:
+            #    secretName: waf-cert-secret
+            #    items:
+            #    - key: tls.crt
+            #      path: tls.crt
+            #      mode: 511
+            #- name: volmount-tls-key
+            #  secret:
+            #    secretName: waf-cert-secret
+            #    items:
+            #    - key: tls.key
+            #      path: tls.key
+            #      mode: 511
+#            - name: volmount-ssl-cert
+#              projected:
+#                sources:
+#                  - secret:
+#                      items:
+#                        - key: ssl-cert.pem
+#                          path: ssl-cert.pem
+#                      name: certificate-modsecurity-waf
+#            - name: volmount-ssl-key
+#              projected:
+#                sources:
+#                  - secret:
+#                      items:
+#                        - key: ssl-cert.key
+#                          path: ssl-cert.key
+#                      name: certificate-modsecurity-waf
+            - name: custom-rules
+              configMap:
+                name: custom-rules
+                items:
+                  - key: custom-before-crs-rules.conf
+                    path: custom-before-crs-rules.conf
+                  - key: custom-after-crs-rules.conf
+                    path: custom-after-crs-rules.conf
+            - name: volmount-tls
+              secret:
+                secretName: waf-cert-secret
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers:
+        - type: ConfigChange
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      annotations:
+        service.alpha.openshift.io/serving-cert-secret-name: waf-cert-secret
+      labels:
+        app: centos-apache-modsecurity
+      name: centos-apache-modsecurity
+    spec:
+      ports:
+      - name: 8443-tcp
+        port: 8443
+        protocol: TCP
+        targetPort: ${{PORT}}
+      selector:
+        app: centos-apache-modsecurity
+        deploymentconfig: centos-apache-modsecurity
+      sessionAffinity: None
+      type: ClusterIP
+parameters:
+- description: 'URL of protected service, eg. https://service-name:8443'
+  displayName: WAF protected service
+  name: BACKEND
+  required: true
+- description: Sets the directive ServerName of the Apache Reverse Proxy.
+  displayName: Apache ServerName
+  name: SERVER_NAME
+  value: 'localhost'
+- description: The listening port of the Apache Reverse Proxy.
+  displayName: Apache listening port
+  name: PORT
+  value: "8443"
+- description: Switch ModSecurity SecRuleEngine On or Off.
+  displayName: ModSecurity On or Off
+  name: SECRULEENGINE
+  value: 'On'
+- description: 'The Paranoia Level (how strict the WAF blocks) between 1 and 4.'
+  displayName: Paranoia Level
+  name: PARANOIA
+  value: '1'
+- description: 'The Executing Paranoia Level between 1 and 4. Must be equals or higher PL.'
+  displayName: Executing Paranoia Level
+  name: EXECUTING_PARANOIA
+  value: '1'
+- description: 'Here, you can specify at which cumulative anomaly score an inbound request gets blocked.'
+  displayName: Inbound Anomaly Score Threshold
+  name: ANOMALY_INBOUND
+  value: '5'
+- description: 'Here, you can specify at which cumulative anomaly score an outbound response gets blocked.'
+  displayName: Outbound Anomaly Score Threshold
+  name: ANOMALY_OUTBOUND
+  value: '4'
+- description: The Apache directive TimeOut.
+  displayName: Apache TimeOut
+  name: APACHE_TIMEOUT
+  value: '10'
+- description: The Apache directive ProxyTimeout.
+  displayName: Apache ProxyTimeout
+  name: PROXY_TIMEOUT
+  value: '30'
+- description: The Apache directive MaxRequestWorkers.
+  displayName: Apache MaxRequestWorkers
+  name: APACHE_MAX_REQUEST_WORKERS
+  value: '100'
+- description: The Apache LogLevel.
+  displayName: Apache LogLevel
+  name: APACHE_LOGLEVEL
+  value: 'notice'
+- description: The path pointing to the Apache ErrorLog.
+  displayName: Apache ErrorLog path
+  name: APACHE_ERRORLOG
+  value: '/dev/stdout'
+- description: The path pointing to the Apache AccessLog.
+  displayName: Apache AccessLog path
+  name: APACHE_ACCESSLOG
+  value: '/dev/stdout extended'
+- description: Performance log path.
+  displayName: Performance log path
+  name: APACHE_PERFLOG
+  value: '/var/log/httpd/modsec-perf.log perflog env=write_perflog'
+- description: Configures whether request bodies will be buffered and processed by ModSecurity.
+  displayName: Request Body access
+  name: REQ_BODY_ACCESS
+  value: 'On'
+- description:  Maximum request body size in bytes.
+  displayName: Request body limit
+  name: REQ_BODY_LIMIT
+  value: '10000000'
+- description: Maximum request body size in bytes excl files.
+  displayName: Request body limit excl files
+  name: REQ_BODY_NOFILES_LIMIT
+  value: '64000'
+- description: Configures whether response bodies will be buffered and processed by ModSecurity.
+  displayName: Response body access
+  name: RESP_BODY_ACCESS
+  value: 'On'
+- description: Maximum response body size in bytes.
+  displayName: Response body limit
+  name: RESP_BODY_LIMIT
+  value: '10000000'
+- description: Sets the match limit in the PCRE library.
+  displayName: Match limit in PCRE
+  name: PCRE_MATCH_LIMIT
+  value: '100000'
+- description: Sets the match limit recursion in the PCRE library.
+  displayName: Match limit recursion in PCRE
+  name: PCRE_MATCH_LIMIT_RECURSION
+  value: '100000'
+- description: Path to the ModSecurity debug log file if SecDebugLogLevel is set.
+  displayName: SecDebugLog
+  name: MODSEC_DEBUG_LOG
+  value: '/var/log/modsecurity/modsec_debug.log'
+- description: 'Configures the verboseness of the debug log data. 0 is no logging.'
+  displayName: SecDebugLogLevel
+  name: MODSEC_DEBUG_LOGLEVEL
+  value: '0'
+- description: Path to the main audit log file.
+  displayName: SecAuditLog
+  name: MODSEC_AUDIT_LOG
+  value: '/var/log/modsecurity/audit.log'
+- description: Defines which parts of each transaction are going to be recorded in the audit log.
+  displayName: SecAuditLogParts
+  name: MODSEC_AUDIT_LOGPARTS
+  value: 'ABEFHIJKZ'
+- description: SecAuditLogType type of logging mechanisms concurrent or serial.
+  displayName: SecAuditLogType
+  name: MODSEC_AUDIT_LOGTYPE
+  value: 'concurrent'
+- description: Select the output format of the AuditLogs. The format can be either the native AuditLogs format or JSON. Currently not supported.
+  displayName: Output format of AuditLog
+  name: MODSEC_AUDIT_LOGFORMAT
+  value: 'JSON'
+- description: Directory where concurrent audit log entries are to be stored.
+  displayName: Concurrent audit log
+  name: MODSEC_AUDIT_STORAGE
+  value: '/var/log/modsecurity/audit/'
+- description: Configures the path where persistent data is to be stored.
+  displayName: Perstistent data store
+  name: MODSEC_DATA_DIR
+  value: '/tmp/'
+- description: Configures the directory where temporary files will be created.
+  displayName: Temporary files directory
+  name: MODSEC_TMP_DIR
+  value: '/tmp/'
+- description: Configures the directory where intercepted files will be stored.
+  displayName: Intercepted files store
+  name: MODSEC_UPLOAD_DIR
+  value: '/tmp/'
+- description: Enforce Body Processor URLENCODED.
+  displayName: Enforce Body Processor URLENCODED
+  name: MODSEC_ENFORCE_BODYPROC_URLENCODED
+  value: '1'
+- description: HTTP methods that a client is allowed to use.
+  displayName: Allowed HTTP methods
+  name: MODSEC_ALLOWED_METHODS
+  value: 'GET HEAD POST OPTIONS'
+- description: Content-Types that a client is allowed to send in a request.
+  displayName: Allowed request content type
+  name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE
+  value: 'application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|application/csp-report|application/xss-auditor-report|text/plain'
+- description: Allowed HTTP versions.
+  displayName: Allowed HTTP versions
+  name: MODSEC_ALLOWED_HTTP_VERSIONS
+  value: 'HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0'
+- description: Forbidden file extensions.
+  displayName: Forbidden file extensions
+  name: MODSEC_RESTRICTED_EXTENSIONS
+  value: '.asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/'
+- description: Forbidden request headers.
+  displayName: Forbidden request headers
+  name: MODSEC_RESTRICTED_HEADERS
+  value: '/proxy/ /lock-token/ /content-range/ /translate/ /if/'
+- description: File extensions considered static files.
+  displayName: File extensions considered static files
+  name: MODSEC_STATIC_EXTENSIONS
+  value: '/.jpg/ /.jpeg/ /.png/ /.gif/ /.js/ /.css/ /.ico/ /.svg/ /.webp/'
+- description: Content-Types charsets that a client is allowed to send in a request.
+  displayName: Allowed Content-Types charsets
+  name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET
+  value: 'utf-8|iso-8859-1|iso-8859-15|windows-1252'
+- description: Block request if number of arguments is too high.
+  displayName: Max number of arguments
+  name: MODSEC_MAX_NUM_ARGS
+  value: '300'
+- description: Block request if the length of any argument name is too high.
+  displayName: Max argument name length
+  name: MODSEC_ARG_NAME_LENGTH
+  value: '255'
+- description: Block request if the length of any argument value is too high.
+  displayName: Max argument length
+  name: MODSEC_ARG_LENGTH
+  value: '400'
+- description: Block request if the total length of all combined arguments is too high.
+  displayName: Max of total arg length
+  name: MODSEC_TOTAL_ARG_LENGTH
+  value: '64000'
+- description: Block request if the file size of any individual uploaded file is too high.
+  displayName: Max file size
+  name: MODSEC_MAX_FILE_SIZE
+  value: '100000000'
+- description: Block request if the total size of all combined uploaded files is too high.
+  displayName: Max total file size
+  name: MODSEC_COMBINED_FILE_SIZE
+  value: '100000000'

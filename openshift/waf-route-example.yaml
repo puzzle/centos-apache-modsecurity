@@ -1,0 +1,17 @@
+kind: Route
+apiVersion: v1
+metadata:
+  labels:
+    app: centos-apache-modsecurity
+  name: centos-apache-modsecurity
+spec:
+  host: centos-apache-modsecurity-external-hostname
+  port:
+    targetPort: 8443-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: reencrypt
+  to:
+    kind: Service
+    name: centos-apache-modsecurity
+    weight: 100
