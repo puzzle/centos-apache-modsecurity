@@ -19,9 +19,9 @@ objects:
       tags:
       - from:
           kind: DockerImage
-          name: quay.io/puzzleitc/centos-apache-modsecurity
+          name: quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev
         importPolicy: {}
-        name: latest
+        name: crs-v3.2.0-dev
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -144,7 +144,7 @@ objects:
                   value: ${MODSEC_MAX_FILE_SIZE}
                 - name: MODSEC_COMBINED_FILE_SIZE
                   value: ${MODSEC_COMBINED_FILE_SIZE}
-              image: 'quay.io/puzzle/centos-apache-modsecurity:latest'
+              image: 'quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev'
               imagePullPolicy: Always
               name: centos-apache-modsecurity
               ports:
@@ -153,6 +153,26 @@ objects:
               resources: {}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
+              readinessProbe:
+                timeoutSeconds: 3
+                initialDelaySeconds: 3
+                httpGet:
+                  path: "/"
+                  port: ${{PORT}}
+                  scheme: HTTPS
+                  httpHeaders:
+                  - name: Accept
+                    value: "*/*"
+              livenessProbe:
+                timeoutSeconds: 3
+                initialDelaySeconds: 30
+                httpGet:
+                  path: /
+                  port: ${{PORT}}
+                  scheme: HTTPS
+                  httpHeaders:
+                  - name: Accept
+                    value: "*/*"
               volumeMounts:
                 #- mountPath: /tmp/tls.crt
                 #  name: volmount-tls-cert

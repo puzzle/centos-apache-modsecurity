@@ -3,8 +3,7 @@ version: "3"
 services:
 
   crs:
-    image: quay.io/puzzle/centos-apache-modsecurity:latest
-    #image: quay.io/puzzle/centos-apache-modsecurity:v3.2.0
+    image: quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev
     ports:
       - "8443:8443"
 
@@ -91,6 +90,7 @@ services:
 
     #######################################################
     # Add TLS server certificate and key
+    # Add your valid certificate/key pair
     #######################################################
-      - ./server.crt:/etc/ssl/certs/ssl-cert.pem
-      - ./server.key:/etc/ssl/private/ssl-cert.key
+      - ./localhost.pem:/etc/ssl/certs/tls.crt
+      - ./localhost.key:/etc/ssl/certs/tls.key
