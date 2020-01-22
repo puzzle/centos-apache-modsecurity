@@ -77,12 +77,6 @@ objects:
                   value: ${APACHE_MAX_REQUEST_WORKERS}
                 - name: APACHE_LOGLEVEL
                   value: ${APACHE_LOGLEVEL}
-                - name: APACHE_ERRORLOG
-                  value: ${APACHE_ERRORLOG}
-                - name: APACHE_ACCESSLOG
-                  value: ${APACHE_ACCESSLOG}
-                - name: APACHE_PERFLOG
-                  value: ${APACHE_PERFLOG}
                 - name: REQ_BODY_ACCESS
                   value: ${REQ_BODY_ACCESS}
                 - name: REQ_BODY_LIMIT
@@ -190,36 +184,6 @@ objects:
                   name: volmount-tls
                   readOnly: true
           volumes:
-            #- name: volmount-tls-cert
-            #  secret:
-            #    secretName: waf-cert-secret
-            #    items:
-            #    - key: tls.crt
-            #      path: tls.crt
-            #      mode: 511
-            #- name: volmount-tls-key
-            #  secret:
-            #    secretName: waf-cert-secret
-            #    items:
-            #    - key: tls.key
-            #      path: tls.key
-            #      mode: 511
-#            - name: volmount-ssl-cert
-#              projected:
-#                sources:
-#                  - secret:
-#                      items:
-#                        - key: ssl-cert.pem
-#                          path: ssl-cert.pem
-#                      name: certificate-modsecurity-waf
-#            - name: volmount-ssl-key
-#              projected:
-#                sources:
-#                  - secret:
-#                      items:
-#                        - key: ssl-cert.key
-#                          path: ssl-cert.key
-#                      name: certificate-modsecurity-waf
             - name: custom-rules
               configMap:
                 name: custom-rules
@@ -246,7 +210,7 @@ objects:
             - centos-apache-modsecurity
             from:
               kind: ImageStreamTag
-              name: centos-apache-modsecurity:${CRS-VERSION}
+              name: centos-apache-modsecurity:${CRS_VERSION}
   - kind: Service
     apiVersion: v1
     metadata:
@@ -327,18 +291,6 @@ parameters:
   displayName: Apache LogLevel
   name: APACHE_LOGLEVEL
   value: 'notice'
-- description: The path pointing to the Apache ErrorLog.
-  displayName: Apache ErrorLog path
-  name: APACHE_ERRORLOG
-  value: '/dev/stdout'
-- description: The path pointing to the Apache AccessLog.
-  displayName: Apache AccessLog path
-  name: APACHE_ACCESSLOG
-  value: '/dev/stdout extended'
-- description: Performance log path.
-  displayName: Performance log path
-  name: APACHE_PERFLOG
-  value: '/var/log/httpd/modsec-perf.log perflog env=write_perflog'
 - description: Configures whether request bodies will be buffered and processed by ModSecurity.
   displayName: Request Body access
   name: REQ_BODY_ACCESS
@@ -378,20 +330,20 @@ parameters:
 - description: Path to the main audit log file.
   displayName: SecAuditLog
   name: MODSEC_AUDIT_LOG
-  value: '/var/log/modsecurity/audit.log'
+  value: '/dev/stdout'
 - description: Defines which parts of each transaction are going to be recorded in the audit log.
   displayName: SecAuditLogParts
   name: MODSEC_AUDIT_LOGPARTS
-  value: 'ABEFHIJKZ'
+  value: 'ABEFHIJZ'
 - description: SecAuditLogType type of logging mechanisms concurrent or serial.
   displayName: SecAuditLogType
   name: MODSEC_AUDIT_LOGTYPE
-  value: 'concurrent'
+  value: 'serial'
 - description: Select the output format of the AuditLogs. The format can be either the native AuditLogs format or JSON. Currently not supported.
   displayName: Output format of AuditLog
   name: MODSEC_AUDIT_LOGFORMAT
   value: 'JSON'
-- description: Directory where concurrent audit log entries are to be stored.
+- description: Directory where concurrent audit log entries are to be stored. Only available for concurrent logging.
   displayName: Concurrent audit log
   name: MODSEC_AUDIT_STORAGE
   value: '/var/log/modsecurity/audit/'
