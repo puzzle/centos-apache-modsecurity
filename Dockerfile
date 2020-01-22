@@ -1,6 +1,6 @@
-FROM centos:7
+FROM centos/httpd-24-centos7
 
-ARG BRANCH=tags/v3.2.0
+ARG VERSION=v3.2.0
 ARG REPO=SpiderLabs/owasp-modsecurity-crs
 ENV PARANOIA=1 \
     PORT=8443 \
@@ -13,8 +13,9 @@ ENV PARANOIA=1 \
     APACHE_MAX_REQUEST_WORKERS=100 \
     APACHE_LOGLEVEL=notice \
     APACHE_ERRORLOG='/dev/stdout' \
-    APACHE_ACCESSLOG='/dev/stdout extended' \
-    APACHE_PERFLOG='/var/log/httpd/modsec-perf.log perflog env=write_perflog' \
+    APACHE_ACCESSLOG='/dev/stdout' \
+    APACHE_ACCESSLOG_FORMAT='extended' \
+    APACHE_PERFLOG='/var/log/httpd24/modsec-perf.log perflog env=write_perflog' \
     SECRULEENGINE=On \
     REQ_BODY_ACCESS=On \
     REQ_BODY_LIMIT=10000000 \
@@ -25,9 +26,9 @@ ENV PARANOIA=1 \
     PCRE_MATCH_LIMIT_RECURSION=100000 \
     MODSEC_DEBUG_LOG=/var/log/modsecurity/modsec_debug.log \
     MODSEC_DEBUG_LOGLEVEL=0 \
-    MODSEC_AUDIT_LOG=/var/log/modsecurity/audit.log \
+    MODSEC_AUDIT_LOG=/dev/stdout \
     MODSEC_AUDIT_LOGPARTS=ABEFHIJKZ \
-    MODSEC_AUDIT_LOGTYPE=concurrent \
+    MODSEC_AUDIT_LOGTYPE=serial \
     MODSEC_AUDIT_LOGFORMAT=JSON \
     MODSEC_AUDIT_STORAGE=/var/log/modsecurity/audit/ \
     MODSEC_DATA_DIR=/tmp/ \
@@ -48,33 +49,22 @@ ENV PARANOIA=1 \
     MODSEC_MAX_FILE_SIZE=100000000 \
     MODSEC_COMBINED_FILE_SIZES=100000000 \
     PROXY_TIMEOUT=30
-# MODSEC_AUDIT_LOGFORMAT is currently not supported
 
-#FIXME: kein git
-RUN yum install -y httpd mod_security mod_ssl wget curl git && \
-    yum -y update && \
-    yum clean all
-
+USER root
 RUN mkdir -p /var/log/modsecurity/audit \
     /etc/httpd/modsecurity/puzzle/custom-before-crs /etc/httpd/modsecurity/service/custom-before-crs \
     /etc/httpd/modsecurity/puzzle/custom-after-crs /etc/httpd/modsecurity/service/custom-after-crs
 
-RUN cd /opt && \
-    git clone https://github.com/${REPO}.git owasp-crs && \
-    cd owasp-crs && \
-    git checkout -qf ${BRANCH} && \
-    cp -R /opt/owasp-crs/ /etc/httpd/modsecurity/owasp-crs/ && \
-    chmod -R g=u /var/log/modsecurity/ /var/log/httpd/ && \
-    chown apache:root -R /var/log/modsecurity/ /var/log/httpd/ && \
+RUN mkdir -p /etc/httpd/modsecurity/owasp-crs && \
+    cd /etc/httpd/modsecurity/owasp-crs && \
+    curl -sL https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/${VERSION}.tar.gz | tar xvfz - --strip-components=1 && \
+    chmod -R g=u /var/log/modsecurity/ && \
+    chown 1001:root -R /var/log/modsecurity/ && \
     rm -rf /etc/httpd/modsecurity.d/
 
 COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY crs-setup-customizable.conf /etc/httpd/modsecurity/owasp-crs/crs-setup-customizable.conf
-COPY localhost.key /etc/ssl/private/ssl-cert.key
-COPY localhost.pem /etc/ssl/certs/ssl-cert.pem
+COPY localhost.key /etc/ssl/certs/tls.key
+COPY localhost.pem /etc/ssl/certs/tls.crt
 
-EXPOSE 8443
-
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-USER apache
+USER 1001

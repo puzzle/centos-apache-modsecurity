@@ -19,9 +19,10 @@ objects:
       tags:
       - from:
           kind: DockerImage
-          name: quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev
-        importPolicy: {}
-        name: crs-v3.2.0-dev
+          name: quay.io/puzzleitc/centos-apache-modsecurity:${CRS_VERSION}
+        importPolicy:
+          scheduled: ${{SCHEDULE_IMAGE_IMPORTS}}
+        name: ${CRS_VERSION}
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -29,7 +30,7 @@ objects:
         app: centos-apache-modsecurity
       name: centos-apache-modsecurity
     spec:
-      replicas: 1
+      replicas: ${{REPLICAS}}
       revisionHistoryLimit: 10
       selector:
         app: centos-apache-modsecurity
@@ -144,8 +145,7 @@ objects:
                   value: ${MODSEC_MAX_FILE_SIZE}
                 - name: MODSEC_COMBINED_FILE_SIZE
                   value: ${MODSEC_COMBINED_FILE_SIZE}
-              image: 'quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev'
-              imagePullPolicy: Always
+              imagePullPolicy: IfNotPresent
               name: centos-apache-modsecurity
               ports:
                 - containerPort: ${{PORT}}
@@ -239,6 +239,14 @@ objects:
       test: false
       triggers:
         - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+            - centos-apache-modsecurity
+            from:
+              kind: ImageStreamTag
+              name: centos-apache-modsecurity:${CRS-VERSION}
   - kind: Service
     apiVersion: v1
     metadata:
@@ -256,9 +264,21 @@ objects:
       selector:
         app: centos-apache-modsecurity
         deploymentconfig: centos-apache-modsecurity
-      sessionAffinity: None
+      sessionAffinity: ClientIP
       type: ClusterIP
 parameters:
+- description: Number of replicas
+  displayName: Number of replicas
+  name: REPLICAS
+  value: "1"
+- description: Whether to import new images automatically.   
+  displayName: Whether to import new images automatically.
+  name: SCHEDULE_IMAGE_IMPORTS   
+  value: 'true'
+- description: CRS version. Docker Image tag name.
+  displayName: CRS version. Docker Image tag name.
+  name: CRS_VERSION
+  value: 'crs-v3.2.0-dev'
 - description: 'URL of protected service, eg. https://service-name:8443'
   displayName: WAF protected service
   name: BACKEND
