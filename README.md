@@ -21,9 +21,9 @@ For a full list of available environment variables see Dockerfile.
 For an explanation of environment variables see [Links](#links).
 
 ## Image quay.io
-https://quay.io/repository/puzzle/centos-apache-modsecurity  
+https://quay.io/repository/puzzleitc/centos-apache-modsecurity
 
-`docker pull quay.io/puzzle/centos-apache-modsecurity:latest`    
+`docker pull quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev`    
 
 The image build is triggered by a GitHub push.
 
