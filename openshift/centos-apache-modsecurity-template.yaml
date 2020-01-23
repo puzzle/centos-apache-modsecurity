@@ -157,6 +157,8 @@ objects:
                   httpHeaders:
                   - name: Accept
                     value: "*/*"
+                  - name: Host
+                    value: "localhost"
               livenessProbe:
                 timeoutSeconds: 3
                 initialDelaySeconds: 30
@@ -167,6 +169,8 @@ objects:
                   httpHeaders:
                   - name: Accept
                     value: "*/*"
+                  - name: Host
+                    value: "localhost"
               volumeMounts:
                 #- mountPath: /tmp/tls.crt
                 #  name: volmount-tls-cert
