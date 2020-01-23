@@ -77,7 +77,7 @@ Important for us (Puzzle) are:
 * Service Specific Exclusions before CRS (ids: 20000 - 49999)
 
 ## To test the container locally:
-`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443 -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzle/centos-apache-modsecurity:latest`
+`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443 -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-dev`
 
 For convenience, a [docker-compose](./docker-compose.yaml) with preconfigured volumes and environment variables is available.
 
