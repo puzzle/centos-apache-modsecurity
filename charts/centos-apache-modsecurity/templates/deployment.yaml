@@ -1,0 +1,180 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "centos-apache-modsecurity.fullname" . }}
+  labels:
+    app: centos-apache-modsecurity
+{{ include "centos-apache-modsecurity.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "centos-apache-modsecurity.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: centos-apache-modsecurity
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "centos-apache-modsecurity.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: centos-apache-modsecurity
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ template "centos-apache-modsecurity.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.modsecurity.apache.port }}
+              protocol: TCP
+          env:
+          - name: BACKEND
+            value: "{{ .Values.modsecurity.backend }}"
+          - name: SERVER_NAME
+            value: "{{ .Values.modsecurity.apache.servername }}"
+          - name: PORT
+            value: "{{ .Values.modsecurity.apache.port }}"
+          - name: SECRULEENGINE
+            value: "{{ .Values.modsecurity.secruleengine }}"
+          - name: PARANOIA
+            value: "{{ .Values.modsecurity.paranoia_level }}"
+          - name: EXECUTING_PARANOIA
+            value: "{{ .Values.modsecurity.executing_paranoia }}"
+          - name: ANOMALY_INBOUND
+            value: "{{ .Values.modsecurity.anomaly.inbound }}"
+          - name: ANOMALY_OUTBOUND
+            value: "{{ .Values.modsecurity.anomaly.outbound }}"            
+          - name: APACHE_TIMEOUT
+            value: "{{ .Values.modsecurity.apache.timeout }}"
+          - name: PROXY_TIMEOUT
+            value: "{{ .Values.modsecurity.apache.proxy_timeout }}"
+          - name: APACHE_MAX_REQUEST_WORKERS
+            value: "{{ .Values.modsecurity.apache.max_request_workers }}"
+          - name: APACHE_LOGLEVEL
+            value: "{{ .Values.modsecurity.apache.loglevel }}"
+          - name: REQ_BODY_ACCESS
+            value: "{{ .Values.modsecurity.req_body_access }}"
+          - name: REQ_BODY_LIMIT
+            value: "{{ .Values.modsecurity.req_body_limit }}"
+          - name: REQ_BODY_NOFILES_LIMIT
+            value: "{{ .Values.modsecurity.req_body_nofiles_limit }}"
+          - name: RESP_BODY_ACCESS
+            value: "{{ .Values.modsecurity.res_body_access }}"
+          - name: RESP_BODY_LIMIT
+            value: "{{ .Values.modsecurity.res_body_limit }}"
+          - name: PCRE_MATCH_LIMIT
+            value: "{{ .Values.modsecurity.pcre.match_limit }}"
+          - name: PCRE_MATCH_LIMIT_RECURSION
+            value: "{{ .Values.modsecurity.pcre.match_limit_recursion }}"
+          - name: MODSEC_DEBUG_LOG
+            value: "{{ .Values.modsecurity.debug.log }}"
+          - name: MODSEC_DEBUG_LOGLEVEL
+            value: "{{ .Values.modsecurity.debug.level }}"
+          - name: MODSEC_AUDIT_LOG
+            value: "{{ .Values.modsecurity.audit.log }}"
+          - name: MODSEC_AUDIT_LOGPARTS
+            value: "{{ .Values.modsecurity.audit.logparts }}"
+          - name: MODSEC_AUDIT_LOGTYPE
+            value: "{{ .Values.modsecurity.audit.logtype }}"
+          - name: MODSEC_AUDIT_LOGFORMAT
+            value: "{{ .Values.modsecurity.audit.logformat }}"
+          - name: MODSEC_AUDIT_STORAGE
+            value: "{{ .Values.modsecurity.audit.storage }}"
+          - name: MODSEC_DATA_DIR
+            value: "{{ .Values.modsecurity.data_dir }}"
+          - name: MODSEC_TMP_DIR
+            value: "{{ .Values.modsecurity.tmp_dir }}"
+          - name: MODSEC_UPLOAD_DIR
+            value: "{{ .Values.modsecurity.upload_dir }}"
+          - name: MODSEC_ENFORCE_BODYPROC_URLENCODED
+            value: "{{ .Values.modsecurity.enforce_bodyproc_urlencoded }}"
+          - name: MODSEC_ALLOWED_METHODS
+            value: "{{ .Values.modsecurity.allowed_methods }}"
+          - name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE
+            value: "{{ .Values.modsecurity.allowed_request_content_type }}"
+          - name: MODSEC_ALLOWED_HTTP_VERSIONS
+            value: "{{ .Values.modsecurity.allowed_http_versions }}"
+          - name: MODSEC_RESTRICTED_EXTENSIONS
+            value: "{{ .Values.modsecurity.forbidden_file_extensions }}"
+          - name: MODSEC_RESTRICTED_HEADERS
+            value: "{{ .Values.modsecurity.restricted_headers }}"
+          - name: MODSEC_STATIC_EXTENSIONS
+            value: "{{ .Values.modsecurity.static_extentions }}"
+          - name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET
+            value: "{{ .Values.modsecurity.allowes_request_content_type_charset }}"
+          - name: MODSEC_MAX_NUM_ARGS
+            value: "{{ .Values.modsecurity.max_num_args }}"
+          - name: MODSEC_ARG_NAME_LENGTH
+            value: "{{ .Values.modsecurity.arg_name_lenght }}"
+          - name: MODSEC_ARG_LENGTH
+            value: "{{ .Values.modsecurity.arg_lenght }}"
+          - name: MODSEC_TOTAL_ARG_LENGTH
+            value: "{{ .Values.modsecurity.total_arg_length }}"
+          - name: MODSEC_MAX_FILE_SIZE
+            value: "{{ .Values.modsecurity.max_file_size }}"
+          - name: MODSEC_COMBINED_FILE_SIZE
+            value: "{{ .Values.modsecurity.combined_file_size }}"
+          livenessProbe:
+            httpGet:
+              path: "/"
+              port: {{ .Values.modsecurity.apache.port }}
+              scheme: HTTPS
+              httpHeaders:
+              - name: Accept
+                value: "*/*"
+              - name: Host
+                value: "localhost"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.modsecurity.apache.port }}
+              scheme: HTTPS
+              httpHeaders:
+              - name: Accept
+                value: "*/*"
+              - name: Host
+                value: "localhost"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - mountPath: /etc/httpd/modsecurity/service/custom-after-crs/rules.conf
+            name: custom-rules
+            subPath: custom-after-crs-rules.conf
+          - mountPath: /etc/httpd/modsecurity/service/custom-before-crs/rules.conf
+            name: custom-rules
+            subPath: custom-before-crs-rules.conf
+          - mountPath: /etc/ssl/certs/
+            name: volmount-tls
+            readOnly: true
+      volumes:
+      - name: custom-rules
+        configMap:
+          name: custom-rules
+          items:
+            - key: custom-before-crs-rules.conf
+              path: custom-before-crs-rules.conf
+            - key: custom-after-crs-rules.conf
+              path: custom-after-crs-rules.conf
+      - name: volmount-tls
+        secret:
+          secretName: waf-cert-secret
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
