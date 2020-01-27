@@ -1,11 +1,21 @@
 # OpenShift WAF Deployment
 
-## Preconditions:
+## Preconditions
+
+The OpenShift template requires a configmap named custom-rules.
 
 ### Config Map for ModSecurity CRS Tuning rules
+
+To add custom ModSecurity tuning rules to a WAF, create a configmap:
+
 `oc create configmap custom-rules --from-file=custom-before-crs-rules.conf=openshift/custom-before-crs-rules.conf --from-file=custom-after-crs-rules.conf=openshift/custom-after-crs-rules.conf`
 
+It's best practice to add customized ModSecurity tuning rules to the application repository.
+
 ## Add the WAF to an OpenShift project
+
+The following command adds a WAF to your project:
+
 `oc process -f openshift/centos-apache-modsecurity-template.yaml -p BACKEND=https://mybackend:8443 | oc apply -f -`
 
 If a route already exists, this route can now be switched to the service of the WAF.  
@@ -14,6 +24,7 @@ Be sure to add a valid certificate/key pair, unless the OpenShift router has a s
 installed which already covers your route.
 
 ## TLS Certificate and Key
+
 The template also takes care of creating a TLS certificate/key pair for the WAF, required
 for the HTTPS connections between the OpenShift routers and the WAF.
 
