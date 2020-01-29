@@ -76,9 +76,18 @@ Important for us (Puzzle) are:
 * Service Specific Exclusions before CRS (ids: 20000 - 49999)
 
 ## Test the container locally
+
 `docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443 -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1`
 
 For convenience, a [docker-compose](./docker-compose.yaml) file with preconfigured volumes and environment variables is available.
+
+## Making changes
+
+Development is done in the latest branch: crs-v3.2.0-waf1-dev.
+
+### Releasing
+
+When a development cycle is done, we release by tagging the current version: crs-v3.2.0-waf1.
 
 ## Links
 
