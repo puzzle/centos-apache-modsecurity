@@ -120,8 +120,8 @@ spec:
             value: "{{ .Values.modsecurity.total_arg_length }}"
           - name: MODSEC_MAX_FILE_SIZE
             value: "{{ .Values.modsecurity.max_file_size }}"
-          - name: MODSEC_COMBINED_FILE_SIZE
-            value: "{{ .Values.modsecurity.combined_file_size }}"
+          - name: MODSEC_COMBINED_FILE_SIZES
+            value: "{{ .Values.modsecurity.combined_file_sizes }}"
           livenessProbe:
             httpGet:
               path: "/"
