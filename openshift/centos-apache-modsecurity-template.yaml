@@ -137,8 +137,8 @@ objects:
                   value: ${MODSEC_TOTAL_ARG_LENGTH}
                 - name: MODSEC_MAX_FILE_SIZE
                   value: ${MODSEC_MAX_FILE_SIZE}
-                - name: MODSEC_COMBINED_FILE_SIZE
-                  value: ${MODSEC_COMBINED_FILE_SIZE}
+                - name: MODSEC_COMBINED_FILE_SIZES
+                  value: ${MODSEC_COMBINED_FILE_SIZES}
               imagePullPolicy: IfNotPresent
               name: centos-apache-modsecurity
               ports:
@@ -402,7 +402,7 @@ parameters:
 - description: Block request if the length of any argument name is too high.
   displayName: Max argument name length
   name: MODSEC_ARG_NAME_LENGTH
-  value: '255'
+  value: '256'
 - description: Block request if the length of any argument value is too high.
   displayName: Max argument length
   name: MODSEC_ARG_LENGTH
@@ -417,5 +417,5 @@ parameters:
   value: '100000000'
 - description: Block request if the total size of all combined uploaded files is too high.
   displayName: Max total file size
-  name: MODSEC_COMBINED_FILE_SIZE
+  name: MODSEC_COMBINED_FILE_SIZES
   value: '100000000'
