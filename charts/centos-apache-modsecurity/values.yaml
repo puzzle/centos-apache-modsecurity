@@ -57,7 +57,7 @@ modsecurity:
   arg_name_lenght: "400" # Block request if the length of any argument value is too high.
   total_arg_length: "64000" # Block request if the total length of all combined arguments is too high.
   max_file_size: "100000000" # Block request if the file size of any individual uploaded file is too high.
-  combined_file_size: "100000000" # Block request if the total size of all combined uploaded files is too high.
+  combined_file_sizes: "100000000" # Block request if the total size of all combined uploaded files is too high.
  
   
 
