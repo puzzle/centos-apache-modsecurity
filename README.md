@@ -77,7 +77,7 @@ Important for us (Puzzle) are:
 
 ## Test the container locally
 
-`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443 -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1`
+`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1`
 
 For convenience, a [docker-compose](./docker-compose.yaml) file with preconfigured volumes and environment variables is available.
 

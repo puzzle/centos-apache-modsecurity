@@ -1,4 +1,4 @@
-FROM centos/httpd-24-centos7
+FROM centos:8
 
 ARG VERSION=v3.2.0
 ARG REPO=SpiderLabs/owasp-modsecurity-crs
@@ -51,6 +51,10 @@ ENV PARANOIA=1 \
     PROXY_TIMEOUT=30
 
 USER root
+RUN yum install -y httpd mod_security mod_ssl curl && \
+    yum -y update && \
+    yum clean all
+
 RUN mkdir -p /var/log/modsecurity/audit \
     /etc/httpd/modsecurity/puzzle/custom-before-crs /etc/httpd/modsecurity/service/custom-before-crs \
     /etc/httpd/modsecurity/puzzle/custom-after-crs /etc/httpd/modsecurity/service/custom-after-crs
