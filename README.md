@@ -1,4 +1,5 @@
 # CentOS Apache ModSecurity WAF
+
 This is the new CentOS Apache ModSecurity with the OWASP ModSecurity Core Rule Set based Puzzle WAF.  
 The main purpose of this WAF is to be loaded into OpenShift projects.
 
@@ -20,6 +21,7 @@ For a full list of available environment variables see [Dockerfile](Dockerfile).
 For an explanation of environment variables see [Links](#links).
 
 ## Image quay.io
+
 https://quay.io/repository/puzzleitc/centos-apache-modsecurity
 
 `docker pull quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1`    
@@ -27,9 +29,11 @@ https://quay.io/repository/puzzleitc/centos-apache-modsecurity
 The image build is triggered by a GitHub push.
 
 ## WAF in OpenShift
+
 To add the WAF to an OpenShift project see [OpenShift README](openshift/README.md).
 
 ## TLS Server Certificate and Key
+
 The WAF only listens on HTTPS. No plain HTTP is available.  
 A self signed TLS certificate and a key is added to the default image. They must be overwritten by a valid certificate and key!
 
@@ -37,11 +41,13 @@ Example (local docker run):
 `docker run -v $(pwd)/ssl-cert.pem:/etc/ssl/certs/ssl-cert.pem -v $(pwd)/ssl-cert.key:/etc/ssl/private/ssl-cert.key ...`
 
 ## Logging
+
 The Apache `access.log` and `error.log` are written to Standard Out.  
 The ModSecurity Audit Logging is set to serial and JSON. This log is written to standard out too.  
 All these settings can be configured during startup.
 
 ## ModSecurity Tuning
+
 An iterative tuning process is recommended.
 * Start the pod with a high value for of 200 for ANOMALY_INBOUND and ANOMALY_OUTBOUND
 * Test the application and follow an iterative tuning process as described in: https://www.netnea.com/cms/apache-tutorial-8-modsecurity-core-rules-tunen/
@@ -72,6 +78,7 @@ We follow Christian Folini (netnea) best practices:
 ```
 
 Important for us (Puzzle) are:
+
 * Puzzle Standard Exclusions before CRS (ids: 10000 - 19999)
 * Service Specific Exclusions before CRS (ids: 20000 - 49999)
 
