@@ -53,22 +53,22 @@ ENV PARANOIA=1 \
 USER root
 RUN yum install -y httpd mod_security mod_ssl curl && \
     yum -y update && \
-    yum clean all
-
-RUN mkdir -p /var/log/modsecurity/audit \
+    yum clean all && \
+    mkdir -p /var/log/modsecurity/audit \
     /etc/httpd/modsecurity/puzzle/custom-before-crs /etc/httpd/modsecurity/service/custom-before-crs \
-    /etc/httpd/modsecurity/puzzle/custom-after-crs /etc/httpd/modsecurity/service/custom-after-crs
-
-RUN mkdir -p /etc/httpd/modsecurity/owasp-crs && \
+    /etc/httpd/modsecurity/puzzle/custom-after-crs /etc/httpd/modsecurity/service/custom-after-crs \
+    /etc/httpd/modsecurity/owasp-crs && \
     cd /etc/httpd/modsecurity/owasp-crs && \
     curl -sL https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/${VERSION}.tar.gz | tar xvfz - --strip-components=1 && \
     chmod -R g=u /var/log/modsecurity/ && \
     chown 1001:root -R /var/log/modsecurity/ && \
     rm -rf /etc/httpd/modsecurity.d/
 
-COPY httpd.conf /etc/httpd/conf/httpd.conf
+COPY httpd.conf /etc/httpd/conf/httpd.conf 
 COPY crs-setup-customizable.conf /etc/httpd/modsecurity/owasp-crs/crs-setup-customizable.conf
 COPY localhost.key /etc/ssl/certs/tls.key
 COPY localhost.pem /etc/ssl/certs/tls.crt
+
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 USER 1001

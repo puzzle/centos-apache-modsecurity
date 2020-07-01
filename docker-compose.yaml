@@ -90,6 +90,16 @@ services:
       #- ./rules-after-crs.conf:/etc/httpd/modsecurity/service/custom-after-crs/rules.conf
 
     #######################################################
+    # Add your custom error pages if needed
+    # Here we mount our default error pages
+    #######################################################
+      - ./error/400.html:/var/www/html/error/400.html
+      - ./error/403.html:/var/www/html/error/403.html
+      - ./error/500.html:/var/www/html/error/500.html
+      - ./error/502.html:/var/www/html/error/502.html
+      - ./error/503.html:/var/www/html/error/503.html
+
+    #######################################################
     # Add TLS server certificate and key
     # Add your valid certificate/key pair
     #######################################################
