@@ -3,8 +3,7 @@ version: "3"
 services:
 
   crs:
-    image: quay.io/puzzle/centos-apache-modsecurity:latest
-    #image: quay.io/puzzle/centos-apache-modsecurity:v3.2.0
+    image: quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1
     ports:
       - "8443:8443"
 
@@ -31,8 +30,6 @@ services:
       #- APACHE_TIMEOUT=10
       #- APACHE_MAX_REQUEST_WORKERS=100
       #- APACHE_LOGLEVEL=notice
-      #- APACHE_ERRORLOG=/dev/stdout
-      #- APACHE_ACCESSLOG=/dev/stdout extended
       #- APACHE_PERFLOG=/var/log/httpd/modsec-perf.log perflog env=write_perflog
       #- PROXY_TIMEOUT=30
 
@@ -54,7 +51,10 @@ services:
       #- PCRE_MATCH_LIMIT_RECURSION=100000
       #- MODSEC_DEBUG_LOG=/var/log/modsecurity/modsec_debug.log
       #- MODSEC_DEBUG_LOGLEVEL=0
-      #- MODSEC_AUDIT_LOG=/var/log/modsecurity/audit.log
+      #- MODSEC_AUDIT_LOG=/dev/stdout
+      #- MODSEC_AUDIT_LOGPARTS=ABEFHIJZ
+      #- MODSEC_AUDIT_LOGTYPE=serial
+      #- MODSEC_AUDIT_LOGFORMAT=JSON
       #- MODSEC_AUDIT_STORAGE=/var/log/modsecurity/audit/
       #- MODSEC_DATA_DIR=/tmp/
       #- MODSEC_TMP_DIR=/tmp/
@@ -90,7 +90,18 @@ services:
       #- ./rules-after-crs.conf:/etc/httpd/modsecurity/service/custom-after-crs/rules.conf
 
     #######################################################
-    # Add TLS server certificate and key
+    # Add your custom error pages if needed
+    # Here we mount our default error pages
     #######################################################
-      - ./server.crt:/etc/ssl/certs/ssl-cert.pem
-      - ./server.key:/etc/ssl/private/ssl-cert.key
+      - ./error/400.html:/var/www/html/error/400.html
+      - ./error/403.html:/var/www/html/error/403.html
+      - ./error/500.html:/var/www/html/error/500.html
+      - ./error/502.html:/var/www/html/error/502.html
+      - ./error/503.html:/var/www/html/error/503.html
+
+    #######################################################
+    # Add TLS server certificate and key
+    # Add your valid certificate/key pair
+    #######################################################
+      - ./localhost.pem:/etc/ssl/certs/tls.crt
+      - ./localhost.key:/etc/ssl/certs/tls.key

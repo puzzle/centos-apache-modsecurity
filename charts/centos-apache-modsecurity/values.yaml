@@ -1,0 +1,106 @@
+# Default values for centos-apache-modsecurity.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: quay.io/puzzleitc/centos-apache-modsecurity
+  tag: crs-v3.2.0-waf1
+  pullPolicy: IfNotPresent
+
+modsecurity:
+  backend: myservice # URL of protected service, eg. https://service-name:8443
+  apache:
+    servername: localhost # Sets the directive ServerName of the Apache Reverse Proxy
+    port: 8443 # The listening port of the Apache Reverse Proxy
+    timeout: "10" # The Apache directive TimeOut.
+    proxy_timeout: "30" # The Apache directive ProxyTimeout.
+    max_request_workers: "100" # The Apache directive MaxRequestWorkers
+    loglevel: notice # The Apache LogLevel
+  secruleengine: "On" # Switch ModSecurity SecRuleEngine On or Off
+  paranoia_level: "1" # The Paranoia Level (how strict the WAF blocks) between 1 and 4.
+  executing_paranoia: "1" # The Executing Paranoia Level between 1 and 4. Must be equals or higher PL.
+  anomaly:
+    inbound: "5" # Here, you can specify at which cumulative anomaly score an inbound request gets blocked.
+    outbound: "4" # Here, you can specify at which cumulative anomaly score an outbound response gets blocked.
+  req_body_access: "On" #  Configures whether request bodies will be buffered and processed by ModSecurity.
+  req_body_limit: "10000000" # Maximum request body size in bytes
+  req_body_nofiles_limit: "64000" # Maximum request body size in bytes excl files
+  res_body_access: "On" # Configures whether response bodies will be buffered and processed by ModSecurity.
+  res_body_limit: "10000000" # Maximum response body size in bytes
+  pcre:
+    match_limit: "100000" # Sets the match limit in the PCRE library
+    match_limit_recursion: "100000" # Sets the match limit recursion in the PCRE library.
+  debug:
+    log: "/var/log/modsecurity/modsec_debug.log" # Path to the ModSecurity debug log file if SecDebugLogLevel is set.
+    level: "0" # Configures the verboseness of the debug log data. 0 is no logging.
+  audit:
+    log: /dev/stdout # Path to the main audit log file
+    logparts: ABEFHIJZ # Defines which parts of each transaction are going to be recorded in the audit log.
+    logtype: serial # SecAuditLogType type of logging mechanisms concurrent or serial.
+    logformat: JSON # Select the output format of the AuditLogs. The format can be either the native AuditLogs format or JSON. Currently not supported.
+    storage: /var/log/modsecurity/audit/ # Directory where concurrent audit log entries are to be stored. Only available for concurrent logging.
+  data_dir: /tmp # Configures the path where persistent data is to be stored
+  tmp_dir: /tmp # Configures the directory where temporary files will be created.
+  upload_dir: /tmp # Configures the directory where intercepted files will be stored
+  enforce_bodyproc_urlencoded: "1" # Enforce Body Processor URLENCODED
+  allowed_methods: "GET HEAD POST OPTIONS" # HTTP methods that a client is allowed to use.
+  allowed_request_content_type: application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|application/csp-report|application/xss-auditor-report|text/plain
+  allowed_http_versions: HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0 
+  forbidden_file_extensions: .asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/
+  restricted_headers: /proxy/ /lock-token/ /content-range/ /translate/ /if/
+  static_extentions: /.jpg/ /.jpeg/ /.png/ /.gif/ /.js/ /.css/ /.ico/ /.svg/ /.webp/
+  allowes_request_content_type_charset: utf-8|iso-8859-1|iso-8859-15|windows-1252
+  max_num_args: "300" # Block request if number of arguments is too high.
+  arg_lenght: "400" # Block request if the length of any argument value is too high.
+  arg_name_lenght: "400" # Block request if the length of any argument value is too high.
+  total_arg_length: "64000" # Block request if the total length of all combined arguments is too high.
+  max_file_size: "100000000" # Block request if the file size of any individual uploaded file is too high.
+  combined_file_sizes: "100000000" # Block request if the total size of all combined uploaded files is too high.
+ 
+  
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8443
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
