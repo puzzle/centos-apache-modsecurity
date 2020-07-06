@@ -24,7 +24,7 @@ For an explanation of environment variables see [Links](#links).
 
 https://quay.io/repository/puzzleitc/centos-apache-modsecurity
 
-`docker pull quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1`    
+`docker pull quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf1`    
 
 The image build is triggered by a GitHub push.
 
@@ -84,19 +84,19 @@ Important for us (Puzzle) are:
 
 ## Test the container locally
 
-`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1`
+`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf1`
 
 For convenience, a [docker-compose](./docker-compose.yaml) file with preconfigured volumes and environment variables is available.
 
 ## Making changes
 
-Development is done in the latest branch: crs-v3.2.0-waf1-dev.
+Development is done in the latest branch: crs-v3.3.0-waf1-dev.
 
 ### Releasing
 
-When a development cycle is done, we release by tagging the current version: crs-v3.2.0-waf1.
+When a development cycle is done, we release by tagging the current version: crs-v3.3.0-waf1.
 
 ## Links
 
 * [Official ModSecurity v2.x Reference Manual](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)) for ModSecurity variables explanation
-* [Core Rule Set Variables](https://github.com/SpiderLabs/owasp-modsecurity-crs/blob/v3.2.0/crs-setup.conf.example) for OWASP Core Rule Set variables explanation
+* [Core Rule Set Variables](https://github.com/coreruleset/coreruleset/blob/v3.3.0/crs-setup.conf.example) for OWASP Core Rule Set variables explanation

@@ -246,7 +246,7 @@ parameters:
 - description: CRS version. Docker Image tag name.
   displayName: CRS version. Docker Image tag name.
   name: CRS_VERSION
-  value: 'crs-v3.2.0-waf1'
+  value: 'crs-v3.3.0-waf1'
 - description: 'URL of protected service, eg. https://service-name:8443'
   displayName: WAF protected service
   name: BACKEND
@@ -374,7 +374,7 @@ parameters:
 - description: Content-Types that a client is allowed to send in a request.
   displayName: Allowed request content type
   name: MODSEC_ALLOWED_REQUEST_CONTENT_TYPE
-  value: 'application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|application/csp-report|application/xss-auditor-report|text/plain'
+  value: '|application/x-www-form-urlencoded| |multipart/form-data| |multipart/related| |text/xml| |application/xml| |application/soap+xml| |application/x-amf| |application/json| |application/cloudevents+json| |application/cloudevents-batch+json| |application/octet-stream| |application/csp-report| |application/xss-auditor-report| |text/plain|'
 - description: Allowed HTTP versions.
   displayName: Allowed HTTP versions
   name: MODSEC_ALLOWED_HTTP_VERSIONS

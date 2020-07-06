@@ -3,7 +3,7 @@ version: "3"
 services:
 
   crs:
-    image: quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.2.0-waf1
+    image: quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf1
     ports:
       - "8443:8443"
 
@@ -65,7 +65,7 @@ services:
       #######################################################
       #- MODSEC_ENFORCE_BODYPROC_URLENCODED=1
       #- MODSEC_ALLOWED_METHODS=GET HEAD POST OPTIONS
-      #- MODSEC_ALLOWED_REQUEST_CONTENT_TYPE=application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|text/plain
+      #- MODSEC_ALLOWED_REQUEST_CONTENT_TYPE=|application/x-www-form-urlencoded| |multipart/form-data| |multipart/related| |text/xml| |application/xml| |application/soap+xml| |application/x-amf| |application/json| |application/cloudevents+json| |application/cloudevents-batch+json| |application/octet-stream| |application/csp-report| |application/xss-auditor-report| |text/plain|
       #- MODSEC_ALLOWED_REQUEST_CONTENT_TYPE_CHARSET=utf-8|iso-8859-1|iso-8859-15|windows-1252
       #- MODSEC_ALLOWED_HTTP_VERSIONS=HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0
       #- MODSEC_RESTRICTED_EXTENSIONS=.asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/
