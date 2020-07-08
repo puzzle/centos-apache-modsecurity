@@ -1,7 +1,7 @@
 FROM centos:8
 
-ARG VERSION=v3.2.0
-ARG REPO=SpiderLabs/owasp-modsecurity-crs
+ARG VERSION=v3.3.0
+ARG REPO=coreruleset/coreruleset
 ENV PARANOIA=1 \
     PORT=8443 \
     EXECUTING_PARANOIA=1 \
@@ -36,7 +36,7 @@ ENV PARANOIA=1 \
     MODSEC_UPLOAD_DIR=/tmp/ \
     MODSEC_ENFORCE_BODYPROC_URLENCODED=1 \
     MODSEC_ALLOWED_METHODS='GET HEAD POST OPTIONS' \
-    MODSEC_ALLOWED_REQUEST_CONTENT_TYPE='application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|application/csp-report|application/xss-auditor-report|text/plain' \
+    MODSEC_ALLOWED_REQUEST_CONTENT_TYPE='|application/x-www-form-urlencoded| |multipart/form-data| |multipart/related| |text/xml| |application/xml| |application/soap+xml| |application/x-amf| |application/json| |application/cloudevents+json| |application/cloudevents-batch+json| |application/octet-stream| |application/csp-report| |application/xss-auditor-report| |text/plain|' \
     MODSEC_ALLOWED_HTTP_VERSIONS='HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0' \
     MODSEC_RESTRICTED_EXTENSIONS='.asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/' \
     MODSEC_RESTRICTED_HEADERS='/proxy/ /lock-token/ /content-range/ /translate/ /if/' \
@@ -59,7 +59,7 @@ RUN yum install -y httpd mod_security mod_ssl curl && \
     /etc/httpd/modsecurity/puzzle/custom-after-crs /etc/httpd/modsecurity/service/custom-after-crs \
     /etc/httpd/modsecurity/owasp-crs && \
     cd /etc/httpd/modsecurity/owasp-crs && \
-    curl -sL https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/${VERSION}.tar.gz | tar xvfz - --strip-components=1 && \
+    curl -sL https://github.com/${REPO}/archive/${VERSION}.tar.gz | tar xvfz - --strip-components=1 && \
     chmod -R g=u /var/log/modsecurity/ && \
     chown 1001:root -R /var/log/modsecurity/ && \
     rm -rf /etc/httpd/modsecurity.d/

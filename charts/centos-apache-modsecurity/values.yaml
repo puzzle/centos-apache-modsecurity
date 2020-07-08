@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: quay.io/puzzleitc/centos-apache-modsecurity
-  tag: crs-v3.2.0-waf1
+  tag: crs-v3.3.0-waf1
   pullPolicy: IfNotPresent
 
 modsecurity:
@@ -46,7 +46,7 @@ modsecurity:
   upload_dir: /tmp # Configures the directory where intercepted files will be stored
   enforce_bodyproc_urlencoded: "1" # Enforce Body Processor URLENCODED
   allowed_methods: "GET HEAD POST OPTIONS" # HTTP methods that a client is allowed to use.
-  allowed_request_content_type: application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/soap+xml|application/x-amf|application/json|application/octet-stream|application/csp-report|application/xss-auditor-report|text/plain
+  allowed_request_content_type: |application/x-www-form-urlencoded| |multipart/form-data| |multipart/related| |text/xml| |application/xml| |application/soap+xml| |application/x-amf| |application/json| |application/cloudevents+json| |application/cloudevents-batch+json| |application/octet-stream| |application/csp-report| |application/xss-auditor-report| |text/plain|
   allowed_http_versions: HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0 
   forbidden_file_extensions: .asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/
   restricted_headers: /proxy/ /lock-token/ /content-range/ /translate/ /if/
