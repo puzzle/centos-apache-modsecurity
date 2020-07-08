@@ -1,6 +1,6 @@
 # CentOS Apache ModSecurity WAF
 
-This is the new CentOS Apache ModSecurity with the OWASP ModSecurity Core Rule Set based Puzzle WAF.  
+This is the CentOS Apache ModSecurity with the OWASP ModSecurity Core Rule Set based Puzzle WAF.  
 The main purpose of this WAF is to be loaded into OpenShift projects.
 
 ## Environment Variables
@@ -40,6 +40,13 @@ A self signed TLS certificate and a key is added to the default image. They must
 Example (local docker run):  
 `docker run -v $(pwd)/ssl-cert.pem:/etc/ssl/certs/ssl-cert.pem -v $(pwd)/ssl-cert.key:/etc/ssl/private/ssl-cert.key ...`
 
+## Custom Error Pages
+
+Custom Error Pages for HTTP statuses 400, 403, 404, 500, 502, 503 can be mounted into the image.
+
+Example (local docker run) for 503.html:  
+`docker run -v $(pwd)/503.html:/var/www/html/error/503.html ...`
+
 ## Logging
 
 The Apache `access.log` and `error.log` are written to Standard Out.  
@@ -49,7 +56,7 @@ All these settings can be configured during startup.
 ## ModSecurity Tuning
 
 An iterative tuning process is recommended.
-* Start the pod with a high value for of 200 for ANOMALY_INBOUND and ANOMALY_OUTBOUND
+* Start the pod with a high value of 200 for ANOMALY_INBOUND and ANOMALY_OUTBOUND
 * Test the application and follow an iterative tuning process as described in: https://www.netnea.com/cms/apache-tutorial-8-modsecurity-core-rules-tunen/
 * Set an ANOMALY_INBOUND of 5 and ANOMALY_OUTBOUND of 4 to set the WAF to blocking.
 
@@ -84,17 +91,26 @@ Important for us (Puzzle) are:
 
 ## Test the container locally
 
-`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf1`
+`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' -p 8443:8443 quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf1`
 
 For convenience, a [docker-compose](./docker-compose.yaml) file with preconfigured volumes and environment variables is available.
 
 ## Making changes
 
-Development is done in the latest branch: crs-v3.3.0-waf1-dev.
+Development is done in a branch created from the newest tag. Current development branch is: crs-v3.3.0-waf2-dev.
+
+* Please base your changes on the latest development branch. 
+* Create a topic branch for your feature or bug fix.
 
 ### Releasing
 
-When a development cycle is done, we release by tagging the current version: crs-v3.3.0-waf1.
+When a development cycle is done, we release by tagging the current development branch: crs-v3.3.0-waf2.
+
+When a development cycle is finished:
+* A tag is created. Example: crs-v3.3.0-waf2 (without -dev at the end)
+* The latest development branch is merged into master. Example: crs-v3.3.0-waf2-dev
+* The current development branch is deleted. Example: crs-v3.3.0-waf2-dev
+* And a new development branch will be created. Example: crs-v3.3.0-waf3-dev
 
 ## Links
 
