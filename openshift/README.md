@@ -6,11 +6,55 @@ The OpenShift template requires a configmap named custom-rules.
 
 ### Config Map for ModSecurity CRS Tuning rules
 
-To add custom ModSecurity tuning rules to a WAF, create a configmap:
+To add custom ModSecurity tuning rules to a WAF, either create a configmap manually:
 
 `oc create configmap custom-rules --from-file=custom-before-crs-rules.conf=openshift/custom-before-crs-rules.conf --from-file=custom-after-crs-rules.conf=openshift/custom-after-crs-rules.conf`
 
+Or you add the configmap as a yaml file:
+
+```yaml
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: custom-rules
+  labels:
+    app: centos-apache-modsecurity
+data:
+  custom-before-crs-rules.conf: |
+    # See https://github.com/puzzle/centos-apache-modsecurity/blob/master/openshift/custom-before-crs-rules.conf
+  custom-after-crs-rules.conf: |
+    # See https://github.com/puzzle/centos-apache-modsecurity/blob/master/openshift/custom-after-crs-rules.conf
+```
+
 It's best practice to add customized ModSecurity tuning rules to the application repository.
+
+### Config Map for Custom Error Pages
+
+To add custom error pages to your WAF, create a configmap.
+
+```yaml
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: error-documents
+  labels:
+    app: centos-apache-modsecurity
+data:
+  400.html: |
+   <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
+  403.html: |
+   <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
+  404.html: |
+   <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
+  500.html: |
+   <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
+  502.html: |
+   <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
+  503.html: |
+   <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
+```
 
 ## Add the WAF to an OpenShift project
 
