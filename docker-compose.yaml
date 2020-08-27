@@ -90,6 +90,13 @@ services:
       #- ./rules-after-crs.conf:/etc/httpd/modsecurity/service/custom-after-crs/rules.conf
 
     #######################################################
+    # Volumes for overriding server, virtualhost or proxy directives
+    #######################################################
+      #- ./server.conf:/etc/httpd/conf/server.conf
+      #- ./virtualhost.conf:/etc/httpd/conf/virtualhost.conf
+      #- ./proxy.conf:/etc/httpd/conf/proxy.conf
+
+    #######################################################
     # Add your custom error pages if needed
     # Here we mount our default error pages
     #######################################################

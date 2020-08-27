@@ -47,6 +47,26 @@ Custom Error Pages for HTTP statuses 400, 403, 404, 500, 502, 503 can be mounted
 Example (local docker run) for 503.html:  
 `docker run -v $(pwd)/503.html:/var/www/html/error/503.html ...`
 
+## Overriding or Adding Apache Directives
+
+Most of the Apache directives can be set with environment variables. However, if a particular Apache directive can not be set through an env variable, there is an option to set is as follows:
+* server.conf -> server context
+* virtualhost.conf -> virtualhost context
+* proxy.conf -> proxy context
+
+Example server.conf file:
+
+```
+$ cat server.conf
+SSLProtocol             All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+```
+
+Example (local docker run) for overriding an Apache directive in the server context:
+
+`docker run -v $(pwd)/server.conf:/etc/httpd/conf/server.conf ...`
+
+Please consider adding an env variable to the Dockerfile, as this can make the configuration more difficult to maintain.
+
 ## Logging
 
 The Apache `access.log` and `error.log` are written to Standard Out.  
