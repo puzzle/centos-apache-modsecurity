@@ -56,6 +56,25 @@ data:
    <!DOCTYPE html><html><head><title>Error</title></head><body><h1>Custom Error Message</h1></body></html>
 ```
 
+### Config Map for overriding or adding Apache Directives
+
+Please see the [main README](../README.md) for further information.
+
+To add or override an Apache directive, create a configmap.
+
+```yaml
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apache-directives
+  labels:
+    app: centos-apache-modsecurity
+data:
+  server.conf: |
+   SSLProtocol             All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+```
+
 ## Add the WAF to an OpenShift project
 
 The following command adds a WAF to your project:

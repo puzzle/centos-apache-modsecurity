@@ -68,6 +68,7 @@ COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY crs-setup-customizable.conf /etc/httpd/modsecurity/owasp-crs/crs-setup-customizable.conf
 COPY localhost.key /etc/ssl/certs/tls.key
 COPY localhost.pem /etc/ssl/certs/tls.crt
+COPY html/waf-healthz /var/www/html/waf-healthz
 
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
