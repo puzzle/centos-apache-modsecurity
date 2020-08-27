@@ -151,7 +151,7 @@ objects:
                 timeoutSeconds: 3
                 initialDelaySeconds: 3
                 httpGet:
-                  path: "/"
+                  path: "/waf-healthz"
                   port: ${{PORT}}
                   scheme: HTTPS
                   httpHeaders:
@@ -163,7 +163,7 @@ objects:
                 timeoutSeconds: 3
                 initialDelaySeconds: 30
                 httpGet:
-                  path: /
+                  path: "/waf-healthz"
                   port: ${{PORT}}
                   scheme: HTTPS
                   httpHeaders:
