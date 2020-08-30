@@ -27,7 +27,7 @@ jobs:
         # Content Type
         contentType: application/json
         # Request Body as JSON String
-        data: { "archive_url": "https://github.com/puzzle/centos-apache-modsecurity/archive/${{ matrix.tag }}.tar.gz", "docker_tags": [ "${{ matrix.tag }}" ], "context": "/centos-apache-modsecurity-${{ matrix.tag }}/", "dockerfile_path": "/centos-apache-modsecurity-${{ matrix.tag }}/Dockerfile" }
+        data: '{"archive_url": "https://github.com/puzzle/centos-apache-modsecurity/archive/${{ matrix.tag }}.tar.gz", "docker_tags": [ "${{ matrix.tag }}" ], "context": "/centos-apache-modsecurity-${{ matrix.tag }}/", "dockerfile_path": "/centos-apache-modsecurity-${{ matrix.tag }}/Dockerfile"}'
         # Bearer Authentication Token
         bearerToken: '${{ secrets.QUAY_ACCESS_TOKEN }}'
         # Prevent this Action to fail if the request respond without an response
