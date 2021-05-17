@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: quay.io/puzzleitc/centos-apache-modsecurity
-  tag: crs-v3.3.0-waf1
+  tag: crs-v3.3.0-waf2
   pullPolicy: IfNotPresent
 
 modsecurity:
