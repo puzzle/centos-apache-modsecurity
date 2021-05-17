@@ -19,7 +19,7 @@ objects:
       tags:
       - from:
           kind: DockerImage
-          name: quay.io/puzzleitc/centos-apache-modsecurity:${CRS_VERSION}
+          name: quay.io/puzzle/centos-apache-modsecurity:${CRS_VERSION}
         importPolicy:
           scheduled: ${{SCHEDULE_IMAGE_IMPORTS}}
         name: ${CRS_VERSION}

@@ -22,9 +22,9 @@ For an explanation of environment variables see [Links](#links).
 
 ## Image quay.io
 
-https://quay.io/repository/puzzleitc/centos-apache-modsecurity
+https://quay.io/repository/puzzle/centos-apache-modsecurity
 
-`docker pull quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf2`
+`docker pull quay.io/puzzle/centos-apache-modsecurity:crs-v3.3.0-waf2`
 
 The image build is triggered by a GitHub push.
 
@@ -111,7 +111,7 @@ Important for us (Puzzle) are:
 
 ## Test the container locally
 
-`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' -p 8443:8443 quay.io/puzzleitc/centos-apache-modsecurity:crs-v3.3.0-waf2`
+`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' -p 8443:8443 quay.io/puzzle/centos-apache-modsecurity:crs-v3.3.0-waf2`
 
 For convenience, a [docker-compose](./docker-compose.yaml) file with preconfigured volumes and environment variables is available.
 
