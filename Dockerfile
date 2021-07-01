@@ -1,6 +1,6 @@
 FROM centos:8
 
-ARG VERSION=v3.3.0
+ARG VERSION=v3.3.2
 ARG REPO=coreruleset/coreruleset
 ENV PARANOIA=1 \
     PORT=8443 \
