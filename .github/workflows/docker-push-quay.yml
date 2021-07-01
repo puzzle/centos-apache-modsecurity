@@ -11,6 +11,7 @@ jobs:
         - crs-v3.2.0-waf1
         - crs-v3.3.0-waf1
         - crs-v3.3.0-waf2
+        - crs-v3.3.2-waf1
 
     steps:
     - uses: actions/checkout@v1
