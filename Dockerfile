@@ -1,4 +1,4 @@
-FROM centos:8
+FROM registry.centos.org/centos:7
 
 ARG VERSION=v3.3.2
 ARG REPO=coreruleset/coreruleset
