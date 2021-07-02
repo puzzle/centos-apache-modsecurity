@@ -1,4 +1,4 @@
-FROM registry.centos.org/centos:8
+FROM registry.access.redhat.com/ubi8/ubi-minimal
 
 ARG VERSION=v3.3.2
 ARG REPO=coreruleset/coreruleset
@@ -51,9 +51,9 @@ ENV PARANOIA=1 \
     PROXY_TIMEOUT=30
 
 USER root
-RUN yum install -y httpd mod_security mod_ssl curl && \
-    yum -y update && \
-    yum clean all && \
+RUN microdnf install -y httpd mod_security mod_ssl curl tar && \
+    microdnf -y update && \
+    microdnf clean all && \
     mkdir -p /var/log/modsecurity/audit \
     /etc/httpd/modsecurity/puzzle/custom-before-crs /etc/httpd/modsecurity/service/custom-before-crs \
     /etc/httpd/modsecurity/puzzle/custom-after-crs /etc/httpd/modsecurity/service/custom-after-crs \
