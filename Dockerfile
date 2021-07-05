@@ -1,4 +1,4 @@
-FROM registry.centos.org/centos:8
+FROM quay.io/rockylinux/rockylinux:8
 
 ARG VERSION=v3.3.2
 ARG REPO=coreruleset/coreruleset
