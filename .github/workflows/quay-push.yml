@@ -4,7 +4,7 @@ on:
   - cron: '0 12 * * MON'  # Run every Monday
 jobs:
   build:
-    name: Build and push image
+    name: Build and push image tags (scheduled)
     runs-on: ubuntu-latest
     strategy:
       matrix:
