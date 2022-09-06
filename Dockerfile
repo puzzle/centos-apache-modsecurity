@@ -51,7 +51,9 @@ ENV PARANOIA=1 \
     PROXY_TIMEOUT=30
 
 USER root
-RUN yum install -y httpd mod_security mod_ssl curl && \
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
+    yum install -y httpd mod_security mod_ssl curl && \
     yum -y update && \
     yum clean all && \
     mkdir -p /var/log/modsecurity/audit \
