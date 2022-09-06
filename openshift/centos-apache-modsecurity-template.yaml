@@ -246,7 +246,7 @@ parameters:
 - description: CRS version. Docker Image tag name.
   displayName: CRS version. Docker Image tag name.
   name: CRS_VERSION
-  value: 'crs-v3.3.2-waf1'
+  value: 'crs-v3.3.2-waf2'
 - description: 'URL of protected service, eg. https://service-name:8443'
   displayName: WAF protected service
   name: BACKEND

@@ -24,7 +24,7 @@ For an explanation of environment variables see [Links](#links).
 
 https://quay.io/repository/puzzle/centos-apache-modsecurity
 
-`docker pull quay.io/puzzle/centos-apache-modsecurity:crs-v3.3.2-waf1`
+`docker pull quay.io/puzzle/centos-apache-modsecurity:crs-v3.3.2-waf2`
 
 The image build is triggered by a GitHub push.
 
@@ -111,26 +111,26 @@ Important for us (Puzzle) are:
 
 ## Test the container locally
 
-`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' -p 8443:8443 quay.io/puzzle/centos-apache-modsecurity:crs-v3.3.2-waf1`
+`docker run -dti -e PARANOIA=2 -e EXECUTING_PARANOIA=2 -e BACKEND='https://myserver:8443' -e SERVERNAME='myserver.puzzle.ch' -p 8443:8443 quay.io/puzzle/centos-apache-modsecurity:crs-v3.3.2-waf2`
 
 For convenience, a [docker-compose](./docker-compose.yaml) file with preconfigured volumes and environment variables is available.
 
 ## Making changes
 
-Development is done in a branch created from the newest tag. Current development branch is: crs-v3.3.2-waf1-dev.
+Development is done in a branch created from the newest tag. Current development branch is: crs-v3.3.2-waf3-dev.
 
 * Please base your changes on the latest development branch. 
 * Create a topic branch for your feature or bug fix.
 
 ### Releasing
 
-When a development cycle is done, we release by tagging the current development branch: crs-v3.3.2-waf1.
+When a development cycle is done, we release by tagging the current development branch: crs-v3.3.2-waf3.
 
 When a development cycle is finished:
-* A tag is created. Example: crs-v3.3.2-waf1 (without -dev at the end)
-* The latest development branch is merged into master. Example: crs-v3.3.2-waf1-dev
-* The current development branch is deleted. Example: crs-v3.3.2-waf1-dev
-* And a new development branch will be created. Example: crs-v3.3.2-waf2-dev
+* A tag is created. Example: crs-v3.3.2-waf2 (without -dev at the end)
+* The latest development branch is merged into master. Example: crs-v3.3.2-waf2-dev
+* The current development branch is deleted. Example: crs-v3.3.2-waf2-dev
+* And a new development branch will be created. Example: crs-v3.3.2-waf3-dev
 
 ## Links
 
