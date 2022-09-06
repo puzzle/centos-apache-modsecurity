@@ -1,11 +1,5 @@
 name: Build and Push Image
 on:
-  push:
-    branches:
-      - 'main'
-  pull_request:
-    branches:
-      - 'main'
   schedule:
   - cron: '0 12 * * MON'  # Run every Monday
 jobs:
@@ -17,9 +11,6 @@ jobs:
         tag:
         - crs-v3.3.2-waf1
         - crs-v3.3.2-waf2
-#        - crs-v3.2.0-waf1
-#        - crs-v3.3.0-waf1
-#        - crs-v3.3.0-waf2
 
     steps:
     - uses: actions/checkout@v2
