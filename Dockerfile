@@ -1,4 +1,4 @@
-FROM quay.io/rockylinux/rockylinux:8
+FROM quay.io/rockylinux/rockylinux:9
 
 ARG VERSION=v3.3.2
 ARG REPO=coreruleset/coreruleset
@@ -51,7 +51,7 @@ ENV PARANOIA=1 \
     PROXY_TIMEOUT=30
 
 USER root
-RUN yum install -y httpd mod_security mod_ssl curl && \
+RUN yum install -y httpd mod_security mod_ssl && \
     yum -y update && \
     yum clean all && \
     mkdir -p /var/log/modsecurity/audit \
