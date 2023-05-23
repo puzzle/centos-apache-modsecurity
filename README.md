@@ -1,7 +1,7 @@
-# CentOS Apache ModSecurity WAF
+# RockyLinux Apache ModSecurity WAF
 
-This is the CentOS Apache ModSecurity with the OWASP ModSecurity Core Rule Set based Puzzle WAF.  
-The main purpose of this WAF is to be loaded into OpenShift projects.
+This is the RockyLinux Apache ModSecurity with the OWASP ModSecurity Core Rule Set based Puzzle WAF. 
+The main purpose of this WAF is to be loaded into OpenShift projects. It used to be based on CentOS, but has been switched over to RockyLinux.
 
 ## Environment Variables
 
